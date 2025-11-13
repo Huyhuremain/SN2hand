@@ -6,9 +6,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gameOverMenu;
     [SerializeField] private GameObject pauseMenu;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         MainMenu();
+
     }
 
     // Update is called once per framefsdfsf
@@ -23,7 +25,7 @@ public class GameManager : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 0f;
     }
-    public void GameOverMenu() 
+    public void GameOverMenu()
     {
         mainMenu.SetActive(false);
         gameOverMenu.SetActive(true);
