@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1019319323502",
+    "firebase_url": "https://sn2hand-82794-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sn2hand-82794",
+    "storage_bucket": "sn2hand-82794.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019319323502:android:e341b1184bf1c0939ccf7f",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.SN2hand"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqVG_G4tQ-L8UmHdPXko49csRGuxpPXsM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
