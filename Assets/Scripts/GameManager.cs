@@ -2,55 +2,96 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // Các biến UI cũ
+    [SerializeField] private GameObject loginRegisterMenu; 
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject gameOverMenu;
     [SerializeField] private GameObject pauseMenu;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
+    
     void Start()
     {
-        MainMenu();
-
+        // Logic hiển thị menu ban đầu được quản lý hoàn toàn trong AuthManager.Start/AuthStateChanged
     }
 
-    // Update is called once per framefsdfsf
-    void Update()
+    // --- CÁC HÀM QUẢN LÝ MENU (Không đổi) ---
+    
+    public void LoginRegisterMenu()
     {
-
+        HideAllMenus(); 
+        loginRegisterMenu.SetActive(true);
+        Time.timeScale = 0f; // Dừng game
     }
+
     public void MainMenu()
     {
+        HideAllMenus();
         mainMenu.SetActive(true);
-        gameOverMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        Time.timeScale = 0f;
+        Time.timeScale = 0f; // Dừng game
     }
+    
     public void GameOverMenu()
     {
-        mainMenu.SetActive(false);
+        HideAllMenus();
         gameOverMenu.SetActive(true);
-        pauseMenu.SetActive(false);
         Time.timeScale = 0f;
     }
+    
     public void PauseGameMenu()
     {
-        mainMenu.SetActive(false);
-        gameOverMenu.SetActive(false);
+        HideAllMenus();
         pauseMenu.SetActive(true);
         Time.timeScale = 0f;
     }
+    
     public void StartGame()
     {
-        mainMenu.SetActive(false);
-        gameOverMenu.SetActive(false);
-        pauseMenu.SetActive(false);
+        HideAllMenus();
         Time.timeScale = 1f;
     }
+    
     public void ResumeGame()
     {
+        StartGame();
+    }
+    
+    private void HideAllMenus()
+    {
+        loginRegisterMenu.SetActive(false);
         mainMenu.SetActive(false);
         gameOverMenu.SetActive(false);
         pauseMenu.SetActive(false);
-        Time.timeScale = 1f;
+    }
+    
+    // --- HÀM RESET TRẠNG THÁI THẾ GIỚI (Cập nhật để gọi EnemyManager) ---
+
+    /// <summary>
+    /// Đặt lại trạng thái toàn bộ thế giới game (Quái vật, Item, v.v.).
+    /// </summary>
+    public void ResetWorldState()
+    {
+        // 1. TÌM VÀ GỌI RESET ENEMY MANAGER
+        EnemyManager enemyManager = FindAnyObjectByType<EnemyManager>();
+        if (enemyManager != null)
+        {
+            // EnemyManager sẽ tự lo việc hủy Enemy hiện tại và reset timer
+            enemyManager.ResetManager(); 
+        }
+        else
+        {
+            // Nếu không có EnemyManager (hoặc không tìm thấy), thực hiện xóa thủ công
+            // (Giữ lại logic này để đảm bảo)
+            BasicEnemy[] enemies = FindObjectsByType<BasicEnemy>(FindObjectsSortMode.None);
+            foreach (BasicEnemy enemy in enemies)
+            {
+                if (enemy != null)
+                {
+                    Destroy(enemy.gameObject);
+                }
+            }
+        }
+        
+        Debug.Log("[GameManager] Đã hoàn thành reset trạng thái thế giới.");
+
+        // TODO: Thêm logic xóa các loại Item, hoặc reset điểm số khác tại đây.
     }
 }

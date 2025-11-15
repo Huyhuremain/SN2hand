@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
-public abstract class Enemy: MonoBehaviour
+using System.Linq; // Cần dùng cho FindObjectsByType
+
+public abstract class Enemy : MonoBehaviour
 {
     [SerializeField] protected float enemyMoveSpeed = 3f;
     protected Player player;
@@ -10,9 +12,21 @@ public abstract class Enemy: MonoBehaviour
 
     [SerializeField] protected float enterDamage = 10f;
     [SerializeField] protected float stayDamage = 1f;
+
+    // THAM CHIẾU MỚI
+    protected EnemyManager enemyManager; 
+
+    protected virtual void Awake() // Đã sửa: dùng Awake để tìm Manager và Player
+    {
+        // SỬA: Dùng FindObjectsByType để tránh cảnh báo
+        player = FindObjectsByType<Player>(FindObjectsSortMode.None).FirstOrDefault();
+        
+        // TÌM ENEMY MANAGER TRONG AWAKE
+        enemyManager = FindAnyObjectByType<EnemyManager>();
+    }
+
     protected virtual void Start()
     {
-        player = FindAnyObjectByType<Player>();
         currentHp = maxHp;
         UpdateHpBar();
     }
@@ -50,6 +64,12 @@ public abstract class Enemy: MonoBehaviour
     }
     protected virtual void Die()
     {
+        // GỌI HÀM CỦA MANAGER: Thông báo Enemy đã chết để Manager bắt đầu hẹn giờ Respawn
+        if (enemyManager != null)
+        {
+            enemyManager.RecordKillAndStartRespawnTimer();
+        }
+        
         Destroy(gameObject);
     }
     protected void UpdateHpBar()
